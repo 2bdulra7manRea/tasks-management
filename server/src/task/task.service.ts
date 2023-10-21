@@ -6,6 +6,7 @@ import { Task } from './entities/task.entity';
 import { Repository } from 'typeorm';
 import { ChangeStatusTaskDto } from './dto/change-status-dto';
 import { HistoryService } from 'src/history/history.service';
+import { ChangeResponsibilityDto } from './dto/change-responsiblity.dto';
 
 @Injectable()
 export class TaskService {
@@ -54,6 +55,26 @@ export class TaskService {
       property: `status`,
       previous: taskBeforeUpdate.status,
       task: taskBeforeUpdate.id,
+    });
+  }
+
+  async changeResponsibilityTask(
+    id: number,
+    changeResponsibilityDto: ChangeResponsibilityDto,
+  ) {
+    const taskBeforeUpdate = await this.tasksRepository.findOne({
+      where: { id },
+    });
+
+    if (!taskBeforeUpdate) {
+      throw new HttpException(
+        'Could not find the task',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return await this.tasksRepository.update(id, {
+      assignedTo: { id: changeResponsibilityDto.assignedTo },
     });
   }
 }

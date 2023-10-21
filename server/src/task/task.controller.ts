@@ -12,6 +12,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ChangeStatusTaskDto } from './dto/change-status-dto';
+import { ChangeResponsibilityDto } from './dto/change-responsiblity.dto';
 
 @ApiTags('tasks')
 @Controller('task')
@@ -52,5 +53,17 @@ export class TaskController {
     @Body() changeStatusTaskDto: ChangeStatusTaskDto,
   ) {
     return this.taskService.changeStatusTask(+id, changeStatusTaskDto);
+  }
+
+  @Patch('/responsibility/:id')
+  @ApiBody({ type: ChangeResponsibilityDto })
+  changeResponsibilityTask(
+    @Param('id') id: string,
+    @Body() changeResponsibilityDto: ChangeResponsibilityDto,
+  ) {
+    return this.taskService.changeResponsibilityTask(
+      +id,
+      changeResponsibilityDto,
+    );
   }
 }
