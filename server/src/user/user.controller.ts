@@ -39,4 +39,9 @@ export class UserController {
       throw new HttpException(error?.message, HttpStatus.BAD_REQUEST);
     }
   }
+
+  @Get()
+  get() {
+    return this.userService.findAll();
+  }
 }
