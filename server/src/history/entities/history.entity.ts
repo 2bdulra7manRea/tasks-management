@@ -1,4 +1,6 @@
+import { Task } from 'src/task/entities/task.entity';
 import { User } from 'src/user/entities/user.entity';
+import internal from 'stream';
 import {
   Column,
   CreateDateColumn,
@@ -23,7 +25,10 @@ export class History {
   property: string;
 
   @ManyToOne(() => User, (user) => user.changedTasks)
-  changedBy: User;
+  changedBy: number;
+
+  @ManyToOne(() => Task, (task) => task.history)
+  task: number;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

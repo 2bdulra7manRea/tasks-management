@@ -1,3 +1,4 @@
+import { History } from 'src/history/entities/history.entity';
 import { User } from 'src/user/entities/user.entity';
 import {
   Column,
@@ -5,6 +6,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -37,6 +39,9 @@ export class Task {
 
   @ManyToOne(() => User, (user) => user.assignedTasks)
   assignedTo: User;
+
+  @OneToMany(() => History, (history) => history.task)
+  history: History[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
