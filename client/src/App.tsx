@@ -1,14 +1,9 @@
-import React from 'react';
 import './App.css';
-import { TaskCard } from './components/task-card/TaskCard';
-import Bucket from './components/bucket/Bucket';
-import TasksList from './pages/tasks/TasksList';
+import MainLayout from './components/layout/Layout';
 
 function App() {
   return (
-    <div >
-      <TasksList/>
-    </div>
+ <MainLayout/>
   );
 }
 
