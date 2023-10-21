@@ -11,6 +11,7 @@ import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ChangeStatusTaskDto } from './dto/change-status-dto';
 
 @ApiTags('tasks')
 @Controller('task')
@@ -42,5 +43,14 @@ export class TaskController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.taskService.remove(+id);
+  }
+
+  @Patch('/status/:id')
+  @ApiBody({ type: ChangeStatusTaskDto })
+  changeStatusTask(
+    @Param('id') id: string,
+    @Body() changeStatusTaskDto: ChangeStatusTaskDto,
+  ) {
+    return this.taskService.changeStatusTask(+id, changeStatusTaskDto);
   }
 }
