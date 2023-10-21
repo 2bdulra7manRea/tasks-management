@@ -12,11 +12,15 @@ export class UserService {
   ) {}
 
   create(createUserDto: CreateUserDto) {
-    return this.usersRepository.create(createUserDto);
+    return this.usersRepository.insert(createUserDto);
   }
 
   findOne(id: number) {
     return this.usersRepository.findBy({ id });
+  }
+
+  findAll() {
+    return this.usersRepository.find();
   }
 
   update(id: number, updateUserDto: any) {
