@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { History } from './entities/history.entity';
+import { AddHistoryDto } from './dto/add-history.dto';
 
 @Injectable()
 export class HistoryService {
@@ -10,7 +11,7 @@ export class HistoryService {
     private historyRepository: Repository<History>,
   ) {}
 
-  add(createHistory: any) {
-    return this.historyRepository.insert(createHistory);
+  add(addHistoryDto: AddHistoryDto) {
+    return this.historyRepository.insert(addHistoryDto);
   }
 }
