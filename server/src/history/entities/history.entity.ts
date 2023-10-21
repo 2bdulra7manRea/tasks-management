@@ -3,30 +3,31 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'history' })
 export class History {
   @PrimaryGeneratedColumn()
-  id: Number;
+  id: number;
 
   @Column({ nullable: false })
-  previous: String;
+  previous: string;
 
   @Column({ nullable: false })
-  current: String;
+  current: string;
 
   @Column({ nullable: false })
-  property: String;
+  property: string;
 
-  @Column({ nullable: false })
+  @ManyToOne(() => User, (user) => user.changedTasks)
   changedBy: User;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 }

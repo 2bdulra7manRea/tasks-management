@@ -1,22 +1,34 @@
+import { History } from 'src/history/entities/history.entity';
+import { Task } from 'src/task/entities/task.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'user' })
 export class User {
   @PrimaryGeneratedColumn()
-  id: Number;
+  id: number;
 
   @Column()
-  username: String;
+  username: string;
 
-  @CreateDateColumn()
+  @OneToMany(() => Task, (task) => task.assignedTo)
+  assignedTasks: Task[];
+
+  @OneToMany(() => Task, (task) => task.createdBy)
+  createdTasks: Task[];
+
+  @OneToMany(() => History, (history) => history.changedBy)
+  changedTasks: History[];
+
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 }

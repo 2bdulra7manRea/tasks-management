@@ -3,6 +3,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -16,29 +18,31 @@ enum STATUS {
   Blocked,
 }
 
-@Entity()
+@Entity({ name: 'task' })
 export class Task {
-  @PrimaryGeneratedColumn()
-  id: Number;
+  @PrimaryGeneratedColumn({ type: 'int' })
+  id: number;
 
   @Column({ nullable: false })
-  title: String;
+  title: string;
 
   @Column({ nullable: false })
-  description: String;
+  description: string;
 
-  @Column({ nullable: false, enum: STATUS })
-  status: STATUS;
+  @Column()
+  status: string;
 
-  @Column({ nullable: false })
+  @ManyToOne(() => User, (user) => user.createdTasks)
+  @JoinColumn()
   createdBy: User;
 
-  @Column({ nullable: true })
+  @ManyToOne(() => User, (user) => user.assignedTasks)
+  @JoinColumn()
   assignedTo: User;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 }
