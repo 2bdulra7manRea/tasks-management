@@ -33,11 +33,9 @@ export class Task {
   status: string;
 
   @ManyToOne(() => User, (user) => user.createdTasks)
-  @JoinColumn()
   createdBy: User;
 
   @ManyToOne(() => User, (user) => user.assignedTasks)
-  @JoinColumn()
   assignedTo: User;
 
   @CreateDateColumn({ type: 'timestamp' })
