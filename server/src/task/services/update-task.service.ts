@@ -8,6 +8,7 @@ import { Task } from '../entities/task.entity';
 import { UpdateTaskDto } from '../dto/update-task.dto';
 import { ChangeTitleTaskDto } from '../dto/change-title.dto';
 import { ChangeDescriptionTaskDto } from '../dto/change-description.dto';
+import { ChangeStatusCommand } from '../commands/change-status-command';
 
 @Injectable()
 export class UpdateTaskService {
@@ -15,6 +16,7 @@ export class UpdateTaskService {
     @InjectRepository(Task)
     private tasksRepository: Repository<Task>,
     private historyService: HistoryService,
+    private readonly changeStatusCommand: ChangeStatusCommand,
   ) {}
 
   async update(id: number, updateTaskDto: UpdateTaskDto) {
@@ -69,28 +71,6 @@ export class UpdateTaskService {
   }
 
   async changeStatusTask(id: number, changeStatusTaskDto: ChangeStatusTaskDto) {
-    await this.tasksRepository.manager.transaction(
-      async (entityManager: EntityManager) => {
-        const taskBeforeUpdate = await entityManager.findOneBy(Task, { id });
-
-        if (!taskBeforeUpdate) {
-          throw new Error('Task is not found!');
-        }
-
-        await entityManager.update(
-          Task,
-          { id },
-          { status: changeStatusTaskDto.status },
-        );
-
-        await this.historyService.addUsingEntityManager(entityManager, {
-          changedBy: changeStatusTaskDto.changedBy,
-          current: { status: changeStatusTaskDto.status },
-          property: `status`,
-          previous: { status: taskBeforeUpdate.status },
-          task: taskBeforeUpdate.id,
-        });
-      },
-    );
+    this.changeStatusCommand.execute(id, changeStatusTaskDto);
   }
 }
