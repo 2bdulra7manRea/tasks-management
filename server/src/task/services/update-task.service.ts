@@ -10,20 +10,17 @@ import { ChangeTitleTaskDto } from '../dto/change-title.dto';
 import { ChangeDescriptionTaskDto } from '../dto/change-description.dto';
 import { ChangeStatusCommand } from '../commands/change-status-command';
 import { ChangeResponsibilityCommand } from '../commands/change-responsibility-command';
+import { ChangeDescriptionCommand } from '../commands/change-description-command';
+import { ChangeTitleCommand } from '../commands/change-title-command';
 
 @Injectable()
 export class UpdateTaskService {
   constructor(
-    @InjectRepository(Task)
-    private tasksRepository: Repository<Task>,
-    private historyService: HistoryService,
     private readonly changeStatusCommand: ChangeStatusCommand,
     private readonly changeResponsibilityCommand: ChangeResponsibilityCommand,
+    private readonly changeDescriptionCommand: ChangeDescriptionCommand,
+    private readonly changeTitleCommand: ChangeTitleCommand,
   ) {}
-
-  async update(id: number, updateTaskDto: UpdateTaskDto) {
-    return this.tasksRepository.update({ id }, updateTaskDto);
-  }
 
   async changeResponsibilityTask(
     id: number,
@@ -39,13 +36,11 @@ export class UpdateTaskService {
     id: number,
     changeDescriptionTaskDto: ChangeDescriptionTaskDto,
   ) {
-    await this.update(id, {
-      description: changeDescriptionTaskDto.description,
-    });
+    return this.changeDescriptionCommand.execute(id, changeDescriptionTaskDto);
   }
 
   async updateTitle(id: number, changeTitleTaskDto: ChangeTitleTaskDto) {
-    await this.update(id, { description: changeTitleTaskDto.title });
+    await this.changeTitleCommand.execute(id, changeTitleTaskDto);
   }
 
   async changeStatusTask(id: number, changeStatusTaskDto: ChangeStatusTaskDto) {
