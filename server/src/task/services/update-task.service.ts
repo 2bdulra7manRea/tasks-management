@@ -3,7 +3,7 @@ import { ChangeResponsibilityDto } from '../dto/change-responsiblity.dto';
 import { ChangeStatusTaskDto } from '../dto/change-status-dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HistoryService } from 'src/history/history.service';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { Task } from '../entities/task.entity';
 import { UpdateTaskDto } from '../dto/update-task.dto';
 import { ChangeTitleTaskDto } from '../dto/change-title.dto';
@@ -19,28 +19,6 @@ export class UpdateTaskService {
 
   async update(id: number, updateTaskDto: UpdateTaskDto) {
     return this.tasksRepository.update({ id }, updateTaskDto);
-  }
-
-  async changeStatusTask(id: number, changeStatusTaskDto: ChangeStatusTaskDto) {
-    const taskBeforeUpdate = await this.tasksRepository.findOneBy({ id });
-
-    if (!taskBeforeUpdate) {
-      throw new HttpException(
-        'Could not find the task',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    // should check before update / or find
-    await this.update(id, { status: changeStatusTaskDto.status });
-
-    this.historyService.add({
-      changedBy: changeStatusTaskDto.changedBy,
-      current: { status: changeStatusTaskDto.status },
-      property: `status`,
-      previous: { status: taskBeforeUpdate.status },
-      task: taskBeforeUpdate.id,
-    });
   }
 
   async changeResponsibilityTask(
@@ -88,5 +66,31 @@ export class UpdateTaskService {
 
   async updateTitle(id: number, changeTitleTaskDto: ChangeTitleTaskDto) {
     await this.update(id, { description: changeTitleTaskDto.title });
+  }
+
+  async changeStatusTask(id: number, changeStatusTaskDto: ChangeStatusTaskDto) {
+    await this.tasksRepository.manager.transaction(
+      async (entityManager: EntityManager) => {
+        const taskBeforeUpdate = await entityManager.findOneBy(Task, { id });
+
+        if (!taskBeforeUpdate) {
+          throw new Error('Task is not found!');
+        }
+
+        await entityManager.update(
+          Task,
+          { id },
+          { status: changeStatusTaskDto.status },
+        );
+
+        await this.historyService.addUsingEntityManager(entityManager, {
+          changedBy: changeStatusTaskDto.changedBy,
+          current: { status: changeStatusTaskDto.status },
+          property: `status`,
+          previous: { status: taskBeforeUpdate.status },
+          task: taskBeforeUpdate.id,
+        });
+      },
+    );
   }
 }
