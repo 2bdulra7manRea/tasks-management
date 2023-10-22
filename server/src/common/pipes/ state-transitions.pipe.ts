@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { ChangeStatusTaskDto } from 'src/task/dto/change-status-dto';
 import { StateTransitionsContext } from 'src/task/state/state-transitions-context';
+import { stringTolowerCase } from '../helpers/helper';
 
 @Injectable()
 export class StateTransitionsPipe implements PipeTransform<any> {
@@ -15,8 +16,8 @@ export class StateTransitionsPipe implements PipeTransform<any> {
     const stateTransitionsContext = new StateTransitionsContext();
 
     const isStateValid = stateTransitionsContext.validateStateTransition(
-      previousStatus,
-      status,
+      stringTolowerCase(previousStatus),
+      stringTolowerCase(status),
     );
 
     if (!isStateValid) {
