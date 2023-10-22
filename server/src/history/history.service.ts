@@ -3,15 +3,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { History } from './entities/history.entity';
 import { AddHistoryDto } from './dto/add-history.dto';
+import { TaskHistory } from './entities/task-history';
 
 @Injectable()
 export class HistoryService {
   constructor(
     @InjectRepository(History)
     private historyRepository: Repository<History>,
+    @InjectRepository(TaskHistory)
+    private taskHistory: Repository<TaskHistory>,
   ) {}
 
-  add(addHistoryDto: AddHistoryDto) {
-    return this.historyRepository.insert(addHistoryDto);
+  async add(addHistoryDto: AddHistoryDto) {
+    addHistoryDto.current = this.taskHistory.create(addHistoryDto.current);
+    addHistoryDto.previous = this.taskHistory.create(addHistoryDto.previous);
+    return this.historyRepository.save(addHistoryDto);
+  }
+
+  async findByTaskId(id: number) {
+    return this.historyRepository.find({ where: { task: id } });
   }
 }

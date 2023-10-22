@@ -5,26 +5,37 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { TaskHistory } from './task-history';
 
 @Entity({ name: 'history' })
 export class History {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
-  previous: string;
+  @OneToOne(() => TaskHistory, (taskHistory) => taskHistory, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  previous: TaskHistory;
 
-  @Column({ nullable: false })
-  current: string;
+  @OneToOne(() => TaskHistory, (taskHistory) => taskHistory, {
+    eager: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  current: TaskHistory;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   property: string;
 
-  @ManyToOne(() => User, (user) => user.changedTasks)
+  @ManyToOne(() => User, (user) => user.changedTasks, { eager: true })
   changedBy: number;
 
   @ManyToOne(() => Task, (task) => task.history)

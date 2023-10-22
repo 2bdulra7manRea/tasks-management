@@ -1,6 +1,6 @@
 export class AddHistoryDto {
-  previous: string;
-  current: string;
+  previous: any;
+  current: any;
   property: string;
   changedBy: number;
   task: number;

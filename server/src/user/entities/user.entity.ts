@@ -1,4 +1,5 @@
 import { History } from 'src/history/entities/history.entity';
+import { TaskHistory } from 'src/history/entities/task-history';
 import { Task } from 'src/task/entities/task.entity';
 import {
   Column,
@@ -25,6 +26,9 @@ export class User {
 
   @OneToMany(() => History, (history) => history.changedBy)
   changedTasks: History[];
+
+  @OneToMany(() => TaskHistory, (taskHistory) => taskHistory.assignedTo)
+  reassignedTasksHistory: TaskHistory[];
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
