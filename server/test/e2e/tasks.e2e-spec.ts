@@ -7,27 +7,27 @@ import {
 import { NODE_SERVER_HOST } from '../../test/mock/data/config';
 describe('TaskController (e2e)', () => {
   it('/ should return all tasks (GET)', async () => {
-    const response = await request(NODE_SERVER_HOST).get('/task').expect(200);
+    const response = await request(NODE_SERVER_HOST).get('/tasks').expect(200);
 
     expect(response.body).toBeDefined();
   });
 
   it('/ should return task by Id (GET)', async () => {
     const response = await request(NODE_SERVER_HOST)
-      .get(`/task/${taskData.id}`)
+      .get(`/tasks/${taskData.id}`)
       .expect(200);
   });
 
   it('/ should return update the task responsibility ', async () => {
     const response = await request(NODE_SERVER_HOST)
-      .patch(`/task/responsibility/${taskData.id}`)
+      .patch(`/tasks/responsibility/${taskData.id}`)
       .send(updatedTaskResponsibility)
       .expect(200);
   });
 
   it('/ should return update the task status', async () => {
     await request(NODE_SERVER_HOST)
-      .patch(`/task/status/${taskData.id}`)
+      .patch(`/tasks/status/${taskData.id}`)
       .send(updatedTaskStatus)
       .expect(200);
   });

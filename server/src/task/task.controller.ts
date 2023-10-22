@@ -19,7 +19,7 @@ import { ChangeTitleTaskDto } from './dto/change-title.dto';
 import { StateTransitionsPipe } from 'src/common/pipes/ state-transitions.pipe';
 
 @ApiTags('tasks')
-@Controller('task')
+@Controller('tasks')
 export class TaskController {
   constructor(
     private readonly taskService: TaskService,
@@ -32,7 +32,7 @@ export class TaskController {
     return this.taskService.create(createTaskDto);
   }
 
-  @Get()
+  @Get('/list')
   findAll() {
     return this.taskService.findAll();
   }
