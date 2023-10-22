@@ -3,9 +3,11 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 export interface Response<T> {
   data: T;
@@ -19,6 +21,13 @@ export class TransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
-    return next.handle().pipe(map((data) => ({ status: 200, data })));
+    return next.handle().pipe(
+      catchError((err) =>
+        throwError(
+          () => new HttpException(err?.message, HttpStatus.BAD_REQUEST),
+        ),
+      ),
+      map((data) => ({ data })),
+    );
   }
 }
