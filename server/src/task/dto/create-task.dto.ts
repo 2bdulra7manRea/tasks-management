@@ -19,8 +19,4 @@ export class CreateTaskDto {
   @IsOptional()
   @IsInt()
   assignedTo: any;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  status: string;
 }

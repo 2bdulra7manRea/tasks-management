@@ -31,7 +31,7 @@ export class Task {
   @Column({ nullable: false })
   description: string;
 
-  @Column()
+  @Column({ default: 'ToDo' })
   status: string;
 
   @ManyToOne(() => User, (user) => user.createdTasks)
