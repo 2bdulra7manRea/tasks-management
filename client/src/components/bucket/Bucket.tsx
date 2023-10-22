@@ -1,8 +1,9 @@
 import { Divider } from "antd";
 import { TaskCard } from "../task-card/TaskCard";
+import { Task } from "../../common/types/tasks.type";
 
-function Bucket(props: { color: string; title: string }) {
-  const { color, title } = props;
+function Bucket(props: { color: string; title: string , data?:Task[] }) {
+  const { color, title , data } = props;
 
   return (
     <div className="m-4" style={{ width: "300px" }}>
@@ -11,24 +12,9 @@ function Bucket(props: { color: string; title: string }) {
       </div>
       <Divider className="m-0" style={{ backgroundColor: color }} />
 
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
-      <TaskCard title="Convert it from plaxe to other"></TaskCard>
+    {data?.map((item)=>{
+      return <TaskCard title={item.title}></TaskCard>
+    })}
     </div>
   );
 }

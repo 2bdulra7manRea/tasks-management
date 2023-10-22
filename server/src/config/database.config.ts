@@ -1,15 +1,18 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { config } from 'process';
 import { History } from 'src/history/entities/history.entity';
+import { TaskHistory } from 'src/history/entities/task-history';
 import { Task } from 'src/task/entities/task.entity';
 import { User } from 'src/user/entities/user.entity';
 
 export const databaseConfig: TypeOrmModuleOptions = {
   type: 'mysql',
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
-  username: process.env.MYSQL_DATABASE_USER_NAME,
-  password: process.env.MYSQL_ROOT_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-  entities: [Task, User, History],
+  host: '172.19.0.3',
+  port: 3306,
+  username: 'root',
+  password: '123',
+  database: 'parking_space',
+  entities: [Task, User, History, TaskHistory],
   synchronize: true,
+  logging: true,
 };
