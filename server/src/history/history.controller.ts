@@ -3,7 +3,7 @@ import { HistoryService } from './history.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('history')
-@Controller('task-history')
+@Controller('history')
 export class HistoryController {
   constructor(private readonly historyService: HistoryService) {}
 
