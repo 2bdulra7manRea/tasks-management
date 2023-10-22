@@ -23,9 +23,9 @@ export class TransformInterceptor<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
       catchError((err) =>
-        throwError(
-          () => new HttpException(err?.message, HttpStatus.BAD_REQUEST),
-        ),
+        throwError(() => {
+          return new HttpException(err, HttpStatus.BAD_REQUEST);
+        }),
       ),
       map((data) => ({ data })),
     );

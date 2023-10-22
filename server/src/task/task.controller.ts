@@ -16,6 +16,7 @@ import { ChangeResponsibilityDto } from './dto/change-responsiblity.dto';
 import { UpdateTaskService } from './services/update-task.service';
 import { ChangeDescriptionTaskDto } from './dto/change-description.dto';
 import { ChangeTitleTaskDto } from './dto/change-title.dto';
+import { StateTransitionsPipe } from 'src/common/pipes/ state-transitions.pipe';
 
 @ApiTags('tasks')
 @Controller('task')
@@ -50,7 +51,7 @@ export class TaskController {
   @ApiBody({ type: ChangeStatusTaskDto })
   changeStatusTask(
     @Param('id') id: string,
-    @Body() changeStatusTaskDto: ChangeStatusTaskDto,
+    @Body(new StateTransitionsPipe()) changeStatusTaskDto: ChangeStatusTaskDto,
   ) {
     return this.updateTaskService.changeStatusTask(+id, changeStatusTaskDto);
   }
