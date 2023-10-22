@@ -7,17 +7,21 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { TaskService } from './task.service';
+import { TaskService } from './services/task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ChangeStatusTaskDto } from './dto/change-status-dto';
 import { ChangeResponsibilityDto } from './dto/change-responsiblity.dto';
+import { UpdateTaskService } from './services/update-task.service';
 
 @ApiTags('tasks')
 @Controller('task')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+  constructor(
+    private readonly taskService: TaskService,
+    private readonly updateTaskService: UpdateTaskService,
+  ) {}
 
   @Post()
   @ApiBody({ type: CreateTaskDto })
@@ -38,7 +42,7 @@ export class TaskController {
   @Patch(':id')
   @ApiBody({ type: UpdateTaskDto })
   update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.taskService.update(+id, updateTaskDto);
+    return this.updateTaskService.update(+id, updateTaskDto);
   }
 
   @Delete(':id')
@@ -52,7 +56,7 @@ export class TaskController {
     @Param('id') id: string,
     @Body() changeStatusTaskDto: ChangeStatusTaskDto,
   ) {
-    return this.taskService.changeStatusTask(+id, changeStatusTaskDto);
+    return this.updateTaskService.changeStatusTask(+id, changeStatusTaskDto);
   }
 
   @Patch('/responsibility/:id')
@@ -61,7 +65,7 @@ export class TaskController {
     @Param('id') id: string,
     @Body() changeResponsibilityDto: ChangeResponsibilityDto,
   ) {
-    return this.taskService.changeResponsibilityTask(
+    return this.updateTaskService.changeResponsibilityTask(
       +id,
       changeResponsibilityDto,
     );
