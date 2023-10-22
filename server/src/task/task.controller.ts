@@ -14,6 +14,8 @@ import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { ChangeStatusTaskDto } from './dto/change-status-dto';
 import { ChangeResponsibilityDto } from './dto/change-responsiblity.dto';
 import { UpdateTaskService } from './services/update-task.service';
+import { ChangeDescriptionTaskDto } from './dto/change-description.dto';
+import { ChangeTitleTaskDto } from './dto/change-title.dto';
 
 @ApiTags('tasks')
 @Controller('task')
@@ -39,12 +41,6 @@ export class TaskController {
     return this.taskService.findOne(+id);
   }
 
-  @Patch(':id')
-  @ApiBody({ type: UpdateTaskDto })
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.updateTaskService.update(+id, updateTaskDto);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.taskService.remove(+id);
@@ -57,6 +53,27 @@ export class TaskController {
     @Body() changeStatusTaskDto: ChangeStatusTaskDto,
   ) {
     return this.updateTaskService.changeStatusTask(+id, changeStatusTaskDto);
+  }
+
+  @Patch('/description/:id')
+  @ApiBody({ type: ChangeDescriptionTaskDto })
+  updateDescription(
+    @Param('id') id: string,
+    @Body() changeDescriptionTaskDto: ChangeDescriptionTaskDto,
+  ) {
+    return this.updateTaskService.updateDescription(
+      +id,
+      changeDescriptionTaskDto,
+    );
+  }
+
+  @Patch('/title/:id')
+  @ApiBody({ type: ChangeTitleTaskDto })
+  updateTitle(
+    @Param('id') id: string,
+    @Body() changeTitleTaskDto: ChangeTitleTaskDto,
+  ) {
+    return this.updateTaskService.updateTitle(+id, changeTitleTaskDto);
   }
 
   @Patch('/responsibility/:id')

@@ -6,6 +6,8 @@ import { HistoryService } from 'src/history/history.service';
 import { Repository } from 'typeorm';
 import { Task } from '../entities/task.entity';
 import { UpdateTaskDto } from '../dto/update-task.dto';
+import { ChangeTitleTaskDto } from '../dto/change-title.dto';
+import { ChangeDescriptionTaskDto } from '../dto/change-description.dto';
 
 @Injectable()
 export class UpdateTaskService {
@@ -15,7 +17,7 @@ export class UpdateTaskService {
     private historyService: HistoryService,
   ) {}
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
+  async update(id: number, updateTaskDto: UpdateTaskDto) {
     return this.tasksRepository.update({ id }, updateTaskDto);
   }
 
@@ -73,5 +75,18 @@ export class UpdateTaskService {
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async updateDescription(
+    id: number,
+    changeDescriptionTaskDto: ChangeDescriptionTaskDto,
+  ) {
+    await this.update(id, {
+      description: changeDescriptionTaskDto.description,
+    });
+  }
+
+  async updateTitle(id: number, changeTitleTaskDto: ChangeTitleTaskDto) {
+    await this.update(id, { description: changeTitleTaskDto.title });
   }
 }
