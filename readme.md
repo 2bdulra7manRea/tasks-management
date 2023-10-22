@@ -86,8 +86,9 @@ To get started with the project, follow these steps:
 
 1. Install the necessary dependencies by running `npm install` or `yarn install`.
 2. Set up the MySQL database and update the database configuration in the project.
-3. Run the project using `npm run start` or `yarn start`.
-4. Access the API endpoints using a tool like Postman or through the provided Swagger documentation.
+3. Run the backend project using `nest start`.
+4. Run the frontend project using `npm start`.
+5. Access the API endpoints using a tool like Postman or through the provided Swagger documentation.
 
 ## Conclusion
 

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Button, Form, Input, Modal, Select } from "antd";
+import { Form, Input, Modal, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -47,7 +46,13 @@ function CreateTask({
 
   return (
     <>
-      <Modal title="Add New Task" style={{height:500}} open={isModalOpen} onOk={handleSubmit(onSubmit)} onCancel={onCancel}>
+      <Modal
+        title="Add New Task"
+        style={{ height: 500 }}
+        open={isModalOpen}
+        onOk={handleSubmit(onSubmit)}
+        onCancel={onCancel}
+      >
         <Form layout="vertical">
           <Controller
             control={control}

@@ -5,6 +5,6 @@ export default () => ({
     port: 3306,
     username: 'root',
     password: '123',
-    database: 'parking_space',
+    database: 'tasks',
   },
 });

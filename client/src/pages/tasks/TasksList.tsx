@@ -1,4 +1,3 @@
-
 import { Button } from "antd";
 import Bucket from "../../components/bucket/Bucket";
 import { useEffect, useState } from "react";
@@ -10,23 +9,17 @@ import { TaskList } from "../../common/types/tasks.type";
 function TasksList() {
   const [isOpenCreateModal, setOpenCreateModal] = useState(false);
 
-  const [tasksData , setTasksData] = useState<TaskList>()
+  const [tasksData, setTasksData] = useState<TaskList>();
 
-  const {data , isSuccess} = useFetchTasks()
+  const { data, isSuccess } = useFetchTasks();
 
-  useEffect(()=>{
-
-    if(data && isSuccess){
-      console.log(data)
-      setTasksData(divideTasksByStatus(data?.data))
-      console.log(tasksData)
+  useEffect(() => {
+    if (data && isSuccess) {
+      setTasksData(divideTasksByStatus(data?.data));
     }
+  }, [isSuccess, data]);
 
-
-  },[isSuccess , data])
-
-
-  console.log(data)
+  console.log(data);
 
   const onCancelCreateModal = () => {
     setOpenCreateModal(false);
@@ -50,11 +43,19 @@ function TasksList() {
         style={{ overflow: "auto", height: 420 }}
       >
         <Bucket color="red" title="ToDo" data={tasksData?.Todo}></Bucket>
-        <Bucket color="green" title="InProgress" data={tasksData?.InProgress}></Bucket>
+        <Bucket
+          color="green"
+          title="InProgress"
+          data={tasksData?.InProgress}
+        ></Bucket>
         <Bucket color="orange" title="InQA" data={tasksData?.InQA}></Bucket>
         <Bucket color="blue" title="Blocked" data={tasksData?.Blocked}></Bucket>
         <Bucket color="purple" title="Done" data={tasksData?.Done}></Bucket>
-        <Bucket color="yellow" title="Deployed" data={tasksData?.Deployed}></Bucket>
+        <Bucket
+          color="yellow"
+          title="Deployed"
+          data={tasksData?.Deployed}
+        ></Bucket>
       </div>
 
       {isOpenCreateModal && (

@@ -8,31 +8,31 @@ services:
     # volumes:
     #   - mysql:/var/lib/mysql
 
-  node_server:
-    container_name: node_container1
-    build: ./server/.
-    ports:
-      - 4000:4000
-    env_file:
-      - ./server/.env
-    depends_on:
-      - db
+  # node_server:
+  #   container_name: node_container1
+  #   build: ./server/.
+  #   ports:
+  #     - 4000:4000
+  #   env_file:
+  #     - ./server/.env
+  #   depends_on:
+  #     - db
 
-  frontend:
-    container_name: frontend_container1
-    build: ./client/.
-    ports:
-      - 3000:3000
-    env_file:
-      - ./client/.env
-    depends_on:
-      - node_server
+  # frontend:
+  #   container_name: frontend_container1
+  #   build: ./client/.
+  #   ports:
+  #     - 3000:3000
+  #   env_file:
+  #     - ./client/.env
+  #   depends_on:
+  #     - node_server
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
 
 # volumes:
 #   mysql:    
