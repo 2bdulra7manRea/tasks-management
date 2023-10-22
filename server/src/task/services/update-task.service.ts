@@ -9,6 +9,7 @@ import { UpdateTaskDto } from '../dto/update-task.dto';
 import { ChangeTitleTaskDto } from '../dto/change-title.dto';
 import { ChangeDescriptionTaskDto } from '../dto/change-description.dto';
 import { ChangeStatusCommand } from '../commands/change-status-command';
+import { ChangeResponsibilityCommand } from '../commands/change-responsibility-command';
 
 @Injectable()
 export class UpdateTaskService {
@@ -17,6 +18,7 @@ export class UpdateTaskService {
     private tasksRepository: Repository<Task>,
     private historyService: HistoryService,
     private readonly changeStatusCommand: ChangeStatusCommand,
+    private readonly changeResponsibilityCommand: ChangeResponsibilityCommand,
   ) {}
 
   async update(id: number, updateTaskDto: UpdateTaskDto) {
@@ -27,34 +29,10 @@ export class UpdateTaskService {
     id: number,
     changeResponsibilityDto: ChangeResponsibilityDto,
   ) {
-    try {
-      const taskBeforeUpdate = await this.tasksRepository.findOne({
-        where: { id },
-      });
-
-      if (!taskBeforeUpdate) {
-        throw new HttpException(
-          'Could not find the task',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      const updateResult = await this.tasksRepository.update(id, {
-        assignedTo: { id: changeResponsibilityDto.assignedTo },
-      });
-
-      this.historyService.add({
-        changedBy: changeResponsibilityDto.changedBy,
-        current: { assignedTo: { id: changeResponsibilityDto.assignedTo } },
-        property: 'the responsibility',
-        previous: { assignedTo: taskBeforeUpdate.assignedTo },
-        task: taskBeforeUpdate.id,
-      });
-
-      return updateResult;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
+    return this.changeResponsibilityCommand.execute(
+      id,
+      changeResponsibilityDto,
+    );
   }
 
   async updateDescription(
@@ -71,6 +49,6 @@ export class UpdateTaskService {
   }
 
   async changeStatusTask(id: number, changeStatusTaskDto: ChangeStatusTaskDto) {
-    this.changeStatusCommand.execute(id, changeStatusTaskDto);
+    await this.changeStatusCommand.execute(id, changeStatusTaskDto);
   }
 }
